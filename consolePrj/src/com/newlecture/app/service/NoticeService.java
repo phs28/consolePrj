@@ -29,9 +29,9 @@ public class NoticeService  {
 		query = "select * from notice_view where " + field + " like ? and NUM between ? and ?";
 		
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		con = DriverManager.getConnection(url, userid, userpw);
+		con = DriverManager.getConnection(url, userid, userpw); 
 		pstmt = con.prepareStatement(query);
-		pstmt.setString(1, "%"+text+"%");
+		pstmt.setString(1, "%"+ text +"%");
 		pstmt.setInt(2, start);
 		pstmt.setInt(3, end);
 		rs = pstmt.executeQuery();

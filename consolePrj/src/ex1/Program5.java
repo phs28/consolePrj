@@ -25,7 +25,7 @@ public class Program5 {
 			case 4:		//글쓰기
 				
 				break;
-			case 5:		//글쓰기
+			case 5:		//검색
 				console.inputSearchWord();
 				break;
 			case 6:
