@@ -21,18 +21,19 @@ public class NoticeService  {
 	String userid = "ojsag";
 	String userpw = "ojsag";
 	
-	public List<Notice> getList(int page) throws Exception {
+	public List<Notice> getList(int page, String field, String text) throws Exception {
 		
 		int start = 1 + (page-1)*10; 
-		int end = 10*page; 
+		int end = 10*page;
 		
-		query = "select * from notice_view where NUM between ? and ?";
+		query = "select * from notice_view where " + field + " like ? and NUM between ? and ?";
 		
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		con = DriverManager.getConnection(url, userid, userpw);
 		pstmt = con.prepareStatement(query);
-		pstmt.setInt(1, start);
-		pstmt.setInt(2, end);
+		pstmt.setString(1, "%"+text+"%");
+		pstmt.setInt(2, start);
+		pstmt.setInt(3, end);
 		rs = pstmt.executeQuery();
 		
 		List<Notice> list = new ArrayList<Notice>();
@@ -55,6 +56,28 @@ public class NoticeService  {
 		pstmt.close();
 		
 		return list;
+	}
+	
+	//scalar : 단위 값
+	public int getCount() throws Exception {
+		int count = 0;
+		
+		query = "select count(id) count from notice";
+		
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		con = DriverManager.getConnection(url, userid, userpw);
+		Statement stmt = con.createStatement();
+		rs = stmt.executeQuery(query);
+		
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		
+		rs.close();
+		con.close();
+		pstmt.close();
+		
+		return count;
 	}
 
 	public int insert(Notice notice) throws ClassNotFoundException, SQLException {
@@ -138,5 +161,6 @@ public class NoticeService  {
 		
 		return i;
 	}
+	
 	
 }
